@@ -29,6 +29,8 @@
 #define ADD32(a, b)            _mm_add_epi32(a, b)
 #define SHUF8(a, mask)         _mm_shuffle_epi8(a, mask)
 
+#define ZERO256                _mm256_zeroall
+
 #define BSWAP_MASK 0x00010203, 0x04050607, 0x08090a0b, 0x0c0d0e0f
 
 #ifdef VAES
@@ -71,12 +73,12 @@ void aes256_enc(OUT uint8_t *ct,
     _mm_storeu_si128((void*)ct, block);
 
     // Delete secrets from registers if any.
-    _mm256_zeroall();
+    ZERO256();
 }
 
 void aes256_ctr_enc(OUT uint8_t *ct,
                     IN const uint8_t *ctr,
-                    IN const uint64_t num_blocks,
+                    IN const uint32_t num_blocks,
                     IN const aes256_ks_t *ks)
 {
     uint32_t i = 0;
@@ -103,7 +105,7 @@ void aes256_ctr_enc(OUT uint8_t *ct,
     }
     
     // Delete secrets from registers if any.
-    _mm256_zeroall();
+    ZERO256();
 }
 
 #ifdef VAES
@@ -117,9 +119,14 @@ _INLINE_ void load_ks(OUT __m512i ks512[AES256_ROUNDS + 1],
     }
 }
 
+// NIST 800-90A Table 3, Section 10.2.1 (no derivation function) states that 
+// max_number_of_bits_per_request is min((2^ctr_len - 4) x block_len, 2^19) <= 2^19
+// Therefore the maximal number of blocks (16 bytes) is 2^19/128 = 2^19/2^7 = 2^12 < 2^32
+// Here num_blocks is assumed to be less then 2^32. 
+// It is the caller responsiblity to ensure it.
 void aes256_ctr_enc512(OUT uint8_t *ct,
                        IN const uint8_t *ctr,
-                       IN const uint64_t num_blocks,
+                       IN const uint32_t num_blocks,
                        IN const aes256_ks_t *ks)
 {
     const uint64_t num_par_blocks = num_blocks/4;
@@ -167,7 +174,7 @@ void aes256_ctr_enc512(OUT uint8_t *ct,
     }
 
     // Delete secrets from registers if any.
-    _mm256_zeroall();
+    ZERO256();
 }
 
 #endif //VAES

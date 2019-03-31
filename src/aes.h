@@ -31,9 +31,7 @@
 #define AES_BLOCK_SIZE (16ULL)
 #define AES256_ROUNDS (14ULL)
 
-#ifdef VAES
-  #define PAR_AES_BLOCK_SIZE (AES_BLOCK_SIZE*4)
-#endif
+#define PAR_AES_BLOCK_SIZE (AES_BLOCK_SIZE*4)
 
 typedef ALIGN(16) struct aes256_key_s {
     uint8_t raw[AES256_KEY_SIZE];
@@ -59,7 +57,7 @@ void aes256_enc(OUT uint8_t *ct,
 // ct[16*num_blocks - 1:16*(num_blocks-1)] = E(pt[15:0] + num_blocks,ks)
 void aes256_ctr_enc(OUT uint8_t *ct,
                     IN const uint8_t *pt,
-                    IN const uint64_t num_blocks,
+                    IN const uint32_t num_blocks,
                     IN const aes256_ks_t *ks);
 
 // Encrypt num_blocks 128-bit blocks using VAES (AVX512)
@@ -69,5 +67,5 @@ void aes256_ctr_enc(OUT uint8_t *ct,
 // ct[16*num_blocks - 1:16*(num_blocks-1)] = E(pt[15:0] + num_blocks,ks)
 void aes256_ctr_enc512(OUT uint8_t *ct,
                        IN const uint8_t *ctr,
-                       IN const uint64_t num_blocks,
+                       IN const uint32_t num_blocks,
                        IN const aes256_ks_t *ks);

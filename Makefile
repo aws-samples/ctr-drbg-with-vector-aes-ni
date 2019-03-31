@@ -2,8 +2,10 @@ BIN_DIR := ./bin
 
 TARGET := $(BIN_DIR)/ctr_drbg
 
-C_SRCS := aes.c  ctr_drbg.c  main.c  test_utilities.c
-S_SRCS := vaes256_key_expansion.S
+SRC_DIR := src
+
+C_SRCS := $(SRC_DIR)/aes.c $(SRC_DIR)/ctr_drbg.c $(SRC_DIR)/main.c $(SRC_DIR)/test_utilities.c
+S_SRCS := $(SRC_DIR)/vaes256_key_expansion.S
 COMP_FILES := $(C_SRCS) $(S_SRCS)
 
 # Platform flags
@@ -24,7 +26,7 @@ ifdef PERF
 endif
 
 ifdef COUNT_INSTRUCTIONS
-    CFLAGS += -DCOUNT_INSTRUCTIONS
+    CFLAGS += -DCOUNT_INSTRUCTIONS -DPERF
 endif
 
 ifdef VAES

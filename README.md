@@ -24,7 +24,7 @@ The CTR DRBG portion of the code (ctr_drbg.c/h) is taken from BoringSSL
 or prediction resistant.
 
 The executable has three flavors:
-1) Validation (default) – uses the test vectors of the Cryptographic Algorithm 
+1) Validation (default) â€“ uses the test vectors of the Cryptographic Algorithm 
    Validation Program (CAVP) of NIST 
    [https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program] 
    to verify the CTR DRBG code. The relevant KATs are copied into the KAT directory.
@@ -44,26 +44,31 @@ To compile:
     make
 
 Compilation flags:
-CC                   - To set the compiler
-AS                   - To set the assembly version
-PERF                 - To measure performance/number of instructions
-MEASURE_INSTRUCTIONS - To measure performance/number of instructions 
-                       (ignored if PERF was not supplied)
-VAES                 - To use vector AES_NI instructions on Intel ICL platforms
+- CC                   - To set the compiler
+- AS                   - To set the assembly version
+- PERF                 - To measure performance/number of instructions
+- MEASURE_INSTRUCTIONS - To measure performance/number of instructions 
+                         (ignored if PERF was not supplied)
+- VAES                 - To use vector AES_NI instructions on Intel ICL platforms
 
 Compilation example:
+
 make CC=clang-6.0 AS=binutils-2.30/gas/as-new PERF=1 COUNT_INSTRUCTIONS=1 VAES=1
 
 In order to run the DRBG with the new VAES instructions:
 
 1) Prerequisites:
-1.1) Download Software Developer Emulator (SDE) version 8.12 or higher, 
-     from https://software.intel.com/en-us/articles/intel-software-development-emulator
-1.2) Ensure the assembly version (binutils) is 2.30 or higher.
-1.3) Use at least gcc 8.2.0 or clang 6.0. older compilers will not recognize the -mvaes flag.
+
+     1.1) Download Software Developer Emulator (SDE) version 8.12 or higher, 
+       from https://software.intel.com/en-us/articles/intel-software-development-emulator
+
+     1.2) Ensure the assembly version (binutils) is 2.30 or higher.
+
+     1.3) Use at least gcc 8.2.0 or clang 6.0. older compilers will not recognize the -mvaes flag.
 
 2) Run the binary using SDE
-2.1) sde -icl -mix -start_ssc_mark 1 -stop_ssc_mark 2 -- ./bin/ctr_drbg 
+
+     2.1) sde -icl -mix -start_ssc_mark 1 -stop_ssc_mark 2 -- ./bin/ctr_drbg 
 
 If the COUNT_INSTRUCTIONS flag is set, the results will appear in sde-mix-out.txt. 
 See the SDE site above on instructions on how to read this file.

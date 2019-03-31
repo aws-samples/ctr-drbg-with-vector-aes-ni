@@ -46,9 +46,8 @@ To compile:
 Compilation flags:
 - CC                   - To set the compiler
 - AS                   - To set the assembly version
-- PERF                 - To measure performance/number of instructions
-- MEASURE_INSTRUCTIONS - To measure performance/number of instructions 
-                         (ignored if PERF was not supplied)
+- PERF                 - To measure performance
+- COUNT_INSTRUCTIONS   - To measure the number of instructions (set PERF=1)
 - VAES                 - To use vector AES_NI instructions on Intel ICL platforms
 
 Compilation example:
